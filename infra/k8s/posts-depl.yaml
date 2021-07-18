@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+  labels:
+    app: posts-depl
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: posts
+      labels:
+        app: posts
+    spec:
+      containers:
+        - name: posts
+          image: sanchitb23/posts:0.0.4
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: posts
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-clusterip-srv
+spec:
+  selector:
+    app: posts
+  ports:
+    - port: 4000
+      name: posts
+      targetPort: 4000
+  type: ClusterIP

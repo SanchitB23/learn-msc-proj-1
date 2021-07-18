@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-depl
+  labels:
+    app: query-depl
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: query
+      labels:
+        app: query
+    spec:
+      containers:
+        - name: query
+          image: sanchitb23/l-msc-p1-query:0.0.3
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: query
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-srv
+spec:
+  selector:
+    app: query
+  ports:
+    - name: query
+      port: 4002
+      targetPort: 4002
+  type: ClusterIP
+

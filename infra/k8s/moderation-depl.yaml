@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moderation-depl
+  labels:
+    app: moderation-depl
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: moderation
+      labels:
+        app: moderation
+    spec:
+      containers:
+        - name: moderation
+          image: sanchitb23/moderation:0.0.1
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: moderation
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: moderation-srv
+spec:
+  selector:
+    app: moderation
+  ports:
+    - name: moderation
+      port: 4003
+      targetPort: 4003
+  type: ClusterIP
+

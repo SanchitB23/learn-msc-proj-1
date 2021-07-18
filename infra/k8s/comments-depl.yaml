@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comments-depl
+  labels:
+    app: comments-depl
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: comments
+      labels:
+        app: comments
+    spec:
+      containers:
+        - name: comments
+          image: sanchitb23/comments:0.0.1
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: comments
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: comments-srv
+spec:
+  selector:
+    app: comments
+  ports:
+    - name: comments
+      port: 4001
+      targetPort: 4001
+  type: ClusterIP
+

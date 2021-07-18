@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: events-depl
+  labels:
+    app: events-depl
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: events
+      labels:
+        app: events
+    spec:
+      containers:
+        - name: events
+          image: sanchitb23/events:0.0.2
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: events
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: events-srv
+spec:
+  selector:
+    app: events
+  ports:
+    - name: events
+      port: 4005
+      targetPort: 4005
+  type: ClusterIP
+
